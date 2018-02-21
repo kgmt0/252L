@@ -208,6 +208,13 @@ plot(th1[,1],testinfo(mod1,th1[,1]),xlab='theta',ylab='information',main='Rasch'
 plot(th2[,1],testinfo(mod2,th2[,1]),xlab='theta',ylab='information',main='2PL')
 plot(th3[,1],testinfo(mod3,th3[,1]),xlab='theta',ylab='information',main='3PL')
 
+<<echo=FALSE,results='hide',message=FALSE,fig.height=2.75>>=
+#Rasch Model
+mod1<-mirt(data,1,itemtype="Rasch")
+rasch_fit <- itemfit(mod1,fit_stats='infit')
+plot(density(rasch_fit[,2], main='Outfit'))
+abline(v=1-1.96*.05,col='red')
+abline(v=1+1.96*.05,col='red')
 @
 
 
