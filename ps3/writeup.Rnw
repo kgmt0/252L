@@ -97,14 +97,11 @@ lines(th, item_info_points, lwd=3)
 
 \item Where is the function in \#6 maximized? What do you think this implies? 
 
-As we are dealing with a Rasch model, the maximum information will be at the average of the difficulties of the items in the test. In our case, the maximum is at 0.167.
-
-<<>>=
-th[which(item_info_points==max(item_info_points))]
-@
-
-Since the value is very close to zero, it implies that $\theta$ will be
-estimated most precisely when it is close to zero.
+As we are dealing with a Rasch model, the maximum information will be at the
+average of the difficulties of the items in the test. In our case, the maximum
+is at \Sexpr{th[which(item_info_points==max(item_info_points))]}. Since the
+value is very close to zero, it implies that $\theta$ will be estimated most
+precisely when it is close to zero.
 
 
 \item For an item response dataset of your choosing, consider the relationship between theta and the SE across the three IRT models for dichotomous items. How much of a difference does the choice of model have on the size of the error estimate?
