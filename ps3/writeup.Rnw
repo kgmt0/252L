@@ -138,6 +138,19 @@ wrightMap(rasch.est,difs_rash, item.side = "itemClassic", main.title = "Wright M
 wrightMap(three.est,difs_3pl, item.side = "itemClassic", main.title = "Wright Map: 3PL")
 @
 
+<<results='hide'>>=
+
+cronbach_alpha<-function(resp) {
+    k<-ncol(resp)
+    v.i<-apply(resp,2,var)
+    o<-rowSums(resp)
+    (k/(k-1))*(1-sum(v.i)/var(o))
+}
+
+cronbach_alpha(resp)
+@
+
+Cronbach's alpha = \Sexpr{round(cronbach_alpha(resp),3)} %this is printing alpha
 
 <<echo=FALSE,fig.height=2.75>>=
 data<-read.table("nde_math_white_space.txt")
