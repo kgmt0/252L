@@ -91,6 +91,22 @@ plot(pars[,3], main = 'Estimated Guessing Parameters')  #these are 'g' values - 
 summary(pars)
 
 
+
+# test information curves
+
+# rasch model - outlying item included
+plot(theta1,testinfo(mod1, theta1))
+
+# rasch model - outlying item removed
+plot(theta1a,testinfo(mod1a, theta1a))
+
+# 2PL 
+plot(theta2,testinfo(mod2, theta2))
+
+# 3PL
+plot(theta3,testinfo(mod3, theta3))
+
+
 #information curves
   
 graphs <- seq(1,40)
