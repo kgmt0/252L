@@ -98,7 +98,7 @@ lines(th, item_info_points, lwd=3)
 
 \item Where is the function in \#6 maximized? What do you think this implies? 
 
-As we are dealing with a Rasch model, the maximum information will be at the average of the difficulties of the items in the test. In our case, the maximum is at 0.167.
+In this case, the maximum is at 0.027.  This, in a sense, represents the ability score that the the test is best at measuring.  More specifically, the test is good at discerning between abilities near this value and worse at discerning between abilities far from this value.
 
 <<>>=
 th[which(item_info_points==max(item_info_points))]
@@ -108,6 +108,33 @@ Since the value is very close to zero, it implies that $\theta$ will be
 estimated most precisely when it is close to zero.
 
 \item For an item response dataset of your choosing, consider the relationship between theta and the SE across the three IRT models for dichotomous items. How much of a difference does the choice of model have on the size of the error estimate?
+
+First consider plots of the standard error vs. ability for the three IRT models, generated from the emp-rasch.txt data set used in lab:
+
+<<echo=FASLE, results='hide', fig.cap="Standard error as a function of ability">>=
+respk<-read.table("emp-rasch.txt",header=FALSE)
+
+#generate models
+modk1<-mirt(respk,1,itemtype="Rasch")
+modk2<-mirt(respk,1,itemtype="2PL")
+modk3<-mirt(respk,1,itemtype="3PL")
+
+#estimate and sort abilities
+fscores(modk1,full.scores.SE=TRUE)->thk1
+th1[order(thk1[,1]),]->thk1
+fscores(modk2,full.scores.SE=TRUE)->thk2
+th2[order(thk2[,1]),]->thk2
+fscores(modk3,full.scores.SE=TRUE)->thk3
+th3[order(thk3[,1]),]->thk3
+
+#generate plots
+par(mfrow=c(3,1))
+plot(jitter(thk1),xlab="theta",ylab="se", main='Rasch',xlim=c(-4,4), ylim=c(0.175,0.625))
+plot(jitter(thk2),xlab="theta",ylab="se",main='2PL',xlim=c(-4,4), ylim=c(0.175,0.625))
+plot(jitter(thk3),xlab="theta",ylab="se",main='3PL',xlim=c(-4,4), ylim=c(0.175,0.625))
+@
+
+As you increase the number of estimated parameters in a model, the standard error, as a whole, decreases.  One interesting feature is the area of lowest standard error shifts between the models.  This is likely due to the change in estimated item difficulties as the models increase in complexity.  The reduction in standard error for more complex models makes sense, because the models ought to be able to fit the data better.  The most intersting part is the increase in error variance as the models become more complex.  This also makes sense, because there are more quantities being estimated for each item.  For the 3PL, especially, estimates of the guessing parameter are particularly unstable with low to moderate numbers of respondents, so this feature also makes sense.
 
 \section*{Consulting Excercise}
 
@@ -141,6 +168,37 @@ plot(density(pv), xlim=c(0, 1))
 plot(density(discrimination), xlim=c(0, 1))
 @
 
+<<echo=FASLE, results='hide', fig.cap="Standard error as a function of ability">>=
+#generate models
+mod1<-mirt(resp,1,itemtype="Rasch")
+mod2<-mirt(resp,1,itemtype="2PL")
+mod3<-mirt(resp,1,itemtype="3PL")
+
+#estimate and sort abilities
+fscores(mod1,full.scores.SE=TRUE)->th1
+th1[order(th1[,1]),]->th1
+fscores(mod2,full.scores.SE=TRUE)->th2
+th2[order(th2[,1]),]->th2
+fscores(mod3,full.scores.SE=TRUE)->th3
+th3[order(th3[,1]),]->th3
+
+#generate plots
+par(mfrow=c(3,1))
+plot(jitter(th1),xlab="theta",ylab="se", main='Rasch',xlim=c(-4,4))
+plot(jitter(th2),xlab="theta",ylab="se",main='2PL',xlim=c(-4,4))
+plot(jitter(th3),xlab="theta",ylab="se",main='3PL',xlim=c(-4,4))
+@
+
+
+<<echo=FASLE, results='hide', fig.cap="Test information by model">>=
+
+#test information plots
+par(mfrow=c(3,1))
+plot(th1[,1],testinfo(mod1,th1[,1]),xlab='theta',ylab='information',main='Rasch')
+plot(th2[,1],testinfo(mod2,th2[,1]),xlab='theta',ylab='information',main='2PL')
+plot(th3[,1],testinfo(mod3,th3[,1]),xlab='theta',ylab='information',main='3PL')
+
+@
 
 
 \end{enumerate}
