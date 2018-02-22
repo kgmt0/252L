@@ -14,9 +14,10 @@
 \author{Carrie Kathlyn Townley Flores, Filipe Recch, Kaylee Tuggle Matheny, \\ Klint Kanopka, Kritphong Mongkhonvanit \\ EDUC 252L}
 
 <<echo=FALSE,warning=FALSE,message=FALSE,error=FALSE>>=
-knitr::opts_chunk$set(cache=TRUE, echo = FALSE, fig.pos="H",fig.height=4, fig.width=6, fig.align = "center")
+knitr::opts_chunk$set(cache=TRUE, echo = FALSE, fig.pos="H",fig.height=4, fig.width=8, fig.align = "center")
 library(mirt)
 library(psych)
+require('WrightMap')
 @
 
 \begin{document}
@@ -147,12 +148,21 @@ resp<-read.table("https://raw.githubusercontent.com/ben-domingue/252L_winter2018
 
 rowSums(resp,na.rm=TRUE)->ctt.est
 #number of factors to extract
-mirt(resp,1)->m1
-fscores(m1)[,1]->rasch.est
-mirt(resp,itemtype="3PL",1)->m1
-fscores(m1)[,1]->three.est
-data.frame(ctt.est,rasch.est,three.est)->df
+m1 <- mirt(resp,1)
+rasch.est <- fscores(m1)[,1]
+difs_rash <- extract.mirt(m1,'parvec')
+
+m3 <- mirt(resp,itemtype="3PL",1)
+three.est <- fscores(m3)[,1]
+difs_3pl <- extract.mirt(m1,'parvec')
+
+df <- data.frame(ctt.est,rasch.est,three.est)
 pairs.panels(df,pch='.',gap=0)
+@
+
+<<results='hide'>>=
+wrightMap(rasch.est,difs_rash, item.side = "itemClassic", main.title = "Wright Map: Rasch Model")
+wrightMap(three.est,difs_3pl, item.side = "itemClassic", main.title = "Wright Map: 3PL")
 @
 
 
