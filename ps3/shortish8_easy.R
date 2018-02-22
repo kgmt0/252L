@@ -27,3 +27,8 @@ par(mfrow=c(3,1))
 plot(th1[,1],testinfo(mod1,th1[,1]),xlab='theta',ylab='information')
 plot(th2[,1],testinfo(mod2,th2[,1]),xlab='theta',ylab='information')
 plot(th3[,1],testinfo(mod3,th3[,1]),xlab='theta',ylab='information')
+
+hist(th3-th1)
+hist(th2-th1)
+hist(th3-th2)
+
