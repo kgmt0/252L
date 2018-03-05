@@ -18,14 +18,6 @@ for (i in 2:46){
   item[i-1,2] <- obj$coefficients[3,4]
 }
 item
-plot(2:46,item[,2])
-abline(h=0.05,col='red')
 
+plot(2:46,item[,1],col=ifelse(item[,2]<=0.05,'red','blue'),main='DIF: Math Items', xlab='Item',ylab='Beta 1')
 
-plot(2:46,item[,1])
-abline(h=0.05,col='red')
-hist(item[,1])
-
-plot(2:46,item[,1],col=ifelse(item[,2]<=0.05,'red','blue'))
-hist(item[,2])
-plot(item[,1],item[,2])
