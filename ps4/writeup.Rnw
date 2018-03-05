@@ -72,6 +72,22 @@ legend(	x="topright",
 		The standard error is smallest when the cutoff point is the
 		closest to the maxima of the polytomous information curve.
 
+<<>>=
+for (i in 1:4) {
+    extr.2 <- extract.item(dic[[i]], 2)
+    SE.tmp <- 1/sqrt(iteminfo(extr.2, Theta))
+    (if (i==1) plot else lines)(Theta,SE.tmp,col=colors[i],type="l")
+}
+
+legend(	x="topright",
+	col=c("black","red","green","blue"),
+	lty=c(1,1,1,1),
+	legend=c(	"polytomous",
+			"cutoff at 1",
+			"cutoff at 2",
+			"cutoff at 3"))
+@
+
 <<message=FALSE,fig.width=6>>=
 # get SEs for dichotomous items
 se <- sapply(	2:length(dic),
