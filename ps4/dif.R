@@ -9,7 +9,6 @@ mathsums
 member <- c(rep(0,731),rep(1,731))
 member
 
-
 item <- matrix(NA,45,2)
 for (i in 2:46){
   m <- glm(resp2[,i] ~ mathsums + member, family='binomial')
@@ -19,5 +18,4 @@ for (i in 2:46){
 }
 item
 
-plot(2:46,item[,1],col=ifelse(item[,2]<=0.05,'red','blue'),main='DIF: Math Items', xlab='Item',ylab='Beta 1')
-
+plot(2:46,item[,1],col=ifelse(item[,2]<=0.05,'red','blue'),main='DIF: Math Items', xlab='Item',ylab=expression(beta[1]))
