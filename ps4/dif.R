@@ -19,3 +19,5 @@ for (i in 2:46){
 item
 
 plot(2:46,item[,1],col=ifelse(item[,2]<=0.05,'red','blue'),main='DIF: Math Items', xlab='Item',ylab=expression(beta[1]))
+
+
