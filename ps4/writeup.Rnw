@@ -12,6 +12,7 @@
 
 <<echo=FALSE,warning=FALSE,message=FALSE,error=FALSE>>=
 knitr::opts_chunk$set(cache=TRUE, echo = FALSE, fig.pos="H",fig.height=5, fig.width=8, fig.align = "center")
+library(mirt)
 @
 
 \begin{document}
@@ -31,7 +32,7 @@ grep("^cr",names(resp))->index
 resp[,index]->resp
 
 ##Let's look at different dichotomizations for just a single item, #2
-library(mirt)
+
 Theta <- matrix(seq(-4,4, by = .1))
 colors <- c("black", "red", "green", "blue")
 apply_cutoff <- function(min_score) {
@@ -42,21 +43,18 @@ apply_cutoff <- function(min_score) {
 dic <- c(	mirt(resp, itemtype="gpcmIRT",1,SE=TRUE),
 		sapply(1:3, apply_cutoff) )
 
-##two general questions coming up. it might be easier to make a simplifying assumption (e.g., things are just coded 012):
-#for (i in 1:ncol(resp)) ifelse(resp[,i]>2,2,resp[,i])->resp[,i]
-##1. what is the effect of dichotomizing low (e.g., responses of 1 and 2 become 1) versus high (e.g., responses of 0 and 1 become 0) on the central tendency and spread of information curves.
-##2. how do standard errors for theta compare when we estimate the GPCM on the data versus low and high dichotimizations?
 @
 	\begin{enumerate}
 		\item
-		The information curves will peak at the cutoff points. The peaks
-		appear to spread uniformly across the x-axis.
+		 What is the effect of dichotomizing low (e.g., responses of 1 and 2 become 1) versus high (e.g., responses of 0 and 1 become 0) on the central tendency and spread of information curves. \\
+		 
+		The information curves will peak at the cutoff points, therefore if we dichotomize low we will have more information about lower levels of $\theta$. The same behaviour is the same if we decide to dichotomize at the higher points. Finally, the peaks appear to spread uniformly across the x-axis from the cut off points. 
 
 <<>>=
 for (i in 1:4) {
     extr.2 <- extract.item(dic[[i]], 2)
     info.tmp <- iteminfo(extr.2, Theta)
-    (if (i==1) plot else lines)(Theta,info.tmp,col=colors[i],type="l")
+    (if (i==1) plot else lines)(Theta,info.tmp,col=colors[i],type="l", xlab=expression(theta))
 }
 
 legend(	x="topright",
@@ -69,8 +67,26 @@ legend(	x="topright",
 @
 
 		\item
-		The standard error is smallest when the cutoff point is the
-		closest to the maxima of the polytomous information curve.
+		How do standard errors for theta compare when we estimate the GPCM on the data versus low and high dichotimizations? \\
+		
+		The standard error is smallest when the cutoff point is the closest to the maxima of the polytomous information curve. Therefore, we will have lower levels of SE when we have more information across $\theta$. In this case, it happens when the cutoff is at two.
+
+<<>>=
+for (i in 1:4) {
+    extr.2 <- extract.item(dic[[i]], 2)
+    SE.tmp <- 1/sqrt(iteminfo(extr.2, Theta))
+    (if (i==1) plot else lines)(Theta,SE.tmp,col=colors[i],type="l", xlab=expression(theta))
+}
+
+legend(x="bottomright",
+	col=c("black","red","green","blue"),
+	lty=c(1,1,1,1),
+	legend=c("polytomous",
+			"cutoff at 1",
+			"cutoff at 2",
+			"cutoff at 3"))
+@
+
 
 <<message=FALSE,fig.width=6>>=
 # get SEs for dichotomous items
